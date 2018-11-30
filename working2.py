@@ -14,7 +14,7 @@ except socket.error, msg:
 
 print 'Socket Created'
 
-host = '10.247.22.118' #Crestron Processor IP
+host = '10.247.22.107' #Crestron Processor IP
 port = 5005 #The port specified in Simpl programs TCP/IP Server symbol
 
 try:
@@ -33,6 +33,8 @@ s.connect((remote_ip , port))
 call(['espeak', 'SOCKET CONNECTED.'])
 print 'Socket Connected to ' + host + ' on ip ' + remote_ip
 
+#strPath = "/home/pi/Desktop/voicecommands.txt"
+#(open('/home/pi/Desktop/voicecommands.txt').readlines()).rstrip()
 
 
 def excel():
@@ -52,22 +54,31 @@ def mainfunction(source):
 
     try:
         user = r.recognize_google(audio, language = "en-us", show_all=False)
+        user = user.lower()
         print(user)
-        if user == "turn on projector":
-            call(['espeak', 'TURNING ON PROJECTOR..'])
-            excel()
-            s.send('turn on projector')
-        elif user == "turn off lights":
-            call(['espeak', 'TURNING OFF LIGHTS...'])
-            internet()
-            s.send('turning off lights')
-        elif user == "media":
-            call(['espeak', 'OPENING MEDIA NOW...'])
-            media()
-            s.send('Open media')
+        #EVENT AREA COMMANDS-----------------------------------------
+        
+        if user == "event area projector on":
+            call(['espeak', 'TURNING ON EVENT AREA PROJECTOR..'])
+            s.send('event area projector on')
+        elif user == "turn off lights in event area":
+            call(['espeak', 'TURNING OFF LIGHTS IN EVENT AREA...'])
+            s.send('event area lights off')
+            
+        #LOBBY COMMANDS-----------------------------------------------
+
+        elif user == "lobby projector on":
+            call(['espeak', 'TURNING ON LOBBY PROJECTOR...'])
+            s.send('lobby projector on')
+        elif user == "turn off lights in lobby":
+            call(['espeak', 'TURNING OFF LOBBY LIGHTS...'])
+            s.send('lobby lights off')
+            
+        #INVALID COMMAND-----------------------------------------------
         else:
             call(['espeak', 'NOT A VALID VOICE COMMAND. TRY AGAIN.'])
     except:
+        #UNRECOGNIZABLE COMMAND
         print("Cannot understand you. Please repeat your command.")
         call(['espeak', 'CANNOT UNDERSTAND YOU. PLEASE REPEAT YOUR COMMAND...'])
 
