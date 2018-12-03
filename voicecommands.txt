@@ -1,0 +1,11 @@
+turn on event area projector
+turn off event area projector
+mute audio in event area
+unmute audio in event area
+increase microphone volume
+decrease microphone volume
+display signage on event monitor
+turn on lobby monitor
+turn off lobby monitor
+display signage on lobby monitor
+
