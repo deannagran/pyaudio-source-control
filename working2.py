@@ -4,7 +4,7 @@ from subprocess import call
 import socket   #for sockets
 import sys  #for exit
 
-call(['espeak', 'HELLO TREY. PLEASE ALLOW TWENTY TO THIRTY SECONDS FOR ME TO WARM UP....'])
+
 try:
     #create an AF_INET, STREAM socket (TCP)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -14,14 +14,14 @@ except socket.error, msg:
 
 print 'Socket Created'
 
-host = '10.247.22.107' #Crestron Processor IP
+host = '10.247.75.32' #Crestron Processor IP
 port = 5005 #The port specified in Simpl programs TCP/IP Server symbol
 
 try:
     remote_ip = socket.gethostbyname( host )
 
 except socket.gaierror:
-    #could not resolve
+    #Could not resolve
     print 'Hostname could not be resolved. Exiting'
     sys.exit()
 
@@ -33,21 +33,6 @@ s.connect((remote_ip , port))
 call(['espeak', 'SOCKET CONNECTED.'])
 print 'Socket Connected to ' + host + ' on ip ' + remote_ip
 
-#strPath = "/home/pi/Desktop/voicecommands.txt"
-#(open('/home/pi/Desktop/voicecommands.txt').readlines()).rstrip()
-
-
-def excel():
-        #os.system("start excel.exe")
-        print("start something excel")
-
-def internet():
-        #os.system("start chrome.exe")
-        print("start something chrome")
-
-def media():
-        #os.system("start wmplayer.exe")
-        print("start something media")
 
 def mainfunction(source):
     audio = r.listen(source)
@@ -67,9 +52,12 @@ def mainfunction(source):
             
         #LOBBY COMMANDS-----------------------------------------------
 
-        elif user == "lobby projector on":
-            call(['espeak', 'TURNING ON LOBBY PROJECTOR...'])
-            s.send('lobby projector on')
+        elif user == "lobby monitor on":
+            call(['espeak', 'TURNING ON LOBBY MONITOR...'])
+            s.send('lobby monitor on')
+        elif user == "lobby monitor off":
+            call(['espeak', 'TURNING OFF LOBBY MONITOR...'])
+            s.send('lobby monitor off')
         elif user == "turn off lights in lobby":
             call(['espeak', 'TURNING OFF LOBBY LIGHTS...'])
             s.send('lobby lights off')
@@ -77,8 +65,9 @@ def mainfunction(source):
         #INVALID COMMAND-----------------------------------------------
         else:
             call(['espeak', 'NOT A VALID VOICE COMMAND. TRY AGAIN.'])
+            print("Not a valid voice command. Try again.")
     except:
-        #UNRECOGNIZABLE COMMAND
+        #UNRECOGNIZABLE COMMAND-----------------------------------------
         print("Cannot understand you. Please repeat your command.")
         call(['espeak', 'CANNOT UNDERSTAND YOU. PLEASE REPEAT YOUR COMMAND...'])
 
@@ -86,5 +75,5 @@ if __name__ == "__main__":
     r = sr.Recognizer()
     with sr.Microphone() as source:
         while 1:
-            print("listening...")
+            print "Listening..."
             mainfunction(source)
